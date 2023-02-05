@@ -230,6 +230,10 @@
       url = "github:scalameta/nvim-metals";
       flake = false;
     };
+    nvim-surround = {
+      url = "github:kylechui/nvim-surround";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -319,6 +323,7 @@
           name = "onedark";
           style = "darker";
         };
+        vim.surround.enable = true;
         vim.autopairs.enable = true;
         vim.autocomplete = {
           enable = true;

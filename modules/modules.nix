@@ -16,6 +16,7 @@
     ./treesitter
     ./tidal
     ./autopairs
+    ./surround
     ./snippets
     ./keys
     ./markdown

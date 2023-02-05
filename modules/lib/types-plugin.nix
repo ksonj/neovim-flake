@@ -42,6 +42,7 @@ with lib; let
     "catppuccin"
     "nvim-metals"
     "vim-scala"
+    "nvim-surround"
   ];
 
   pluginsType = with types; listOf (nullOr (either (enum availablePlugins) package));
