@@ -46,6 +46,7 @@ in {
         graphql
         json
         zig
+        bash
       ];
       description = ''
         List of treesitter grammars to install.
