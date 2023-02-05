@@ -61,6 +61,14 @@ in {
     go = mkEnableOption "Go language LSP";
     ts = mkEnableOption "TS language LSP";
     zig.enable = mkEnableOption "Zig language LSP";
+    scala = {
+      enable = mkEnableOption "Scala LSP";
+      metals = mkOption {
+        type = types.package;
+        default = pkgs.metals;
+        description = "The Metals package to use. Default pkgs.metals.";
+      };
+    };
   };
 
   config = mkIf cfg.enable (
@@ -90,6 +98,13 @@ in {
           then [
             "crates-nvim"
             "rust-tools"
+          ]
+          else []
+        )
+        ++ (
+          if cfg.scala.enable
+          then [
+            "nvim-metals"
           ]
           else []
         );
@@ -310,6 +325,36 @@ in {
             cmd = {"${pkgs.nodePackages.pyright}/bin/pyright-langserver", "--stdio"}
           }
         ''}
+        ${
+          writeIf cfg.scala.enable ''
+            -- Scala config
+            -- Scala nvim-metals config
+            metals_config = require('metals').bare_config()
+            metals_config.capabilities = capabilities
+            metals_config.on_attach = default_on_attach
+            metals_config.settings = {
+               metalsBinaryPath = "${cfg.scala.metals}/bin/metals",
+               showImplicitArguments = true,
+               excludedPackages = {
+                 "akka.actor.typed.javadsl",
+                 "com.github.swagger.akka.javadsl"
+               }
+            }
+            metals_config.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+              vim.lsp.diagnostic.on_publish_diagnostics, {
+                virtual_text = {
+                  prefix = '',
+                }
+              }
+            )
+            -- without doing this, autocommands that deal with filetypes prohibit messages from being shown
+            vim.opt_global.shortmess:remove("F")
+            vim.cmd([[augroup lsp]])
+            vim.cmd([[autocmd!]])
+            vim.cmd([[autocmd FileType java,scala,sbt lua require('metals').initialize_or_attach(metals_config)]])
+            vim.cmd([[augroup end]])
+          ''
+        }
 
         ${writeIf cfg.nix.enable (
           (writeIf (cfg.nix.server == "rnix") ''

@@ -47,6 +47,7 @@ in {
         json
         zig
         bash
+        scala
       ];
       description = ''
         List of treesitter grammars to install.

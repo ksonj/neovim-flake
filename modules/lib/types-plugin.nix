@@ -40,6 +40,8 @@ with lib; let
     "rust-tools"
     "onedark"
     "catppuccin"
+    "nvim-metals"
+    "vim-scala"
   ];
 
   pluginsType = with types; listOf (nullOr (either (enum availablePlugins) package));

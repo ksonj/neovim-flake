@@ -225,6 +225,11 @@
       url = "github:nvim-lua/plenary.nvim";
       flake = false;
     };
+
+    nvim-metals = {
+      url = "github:scalameta/nvim-metals";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -280,6 +285,7 @@
           };
           rust.enable = isMaximal;
           python = isMaximal;
+          scala.enable = isMaximal;
           clang.enable = isMaximal;
           sql = isMaximal;
           ts = isMaximal;
