@@ -7,6 +7,17 @@
 with lib;
 with builtins; let
   cfg = config.vim.lsp;
+  black-and-isort = pkgs.writeShellApplication {
+    name = "black";
+    text = ''
+      black --quiet - "$@" | isort --profile black -
+    '';
+    runtimeInputs = [pkgs.python310Packages.black pkgs.python310Packages.isort];
+  };
+  black =
+    if cfg.python.sortImports
+    then black-and-isort
+    else pkgs.black;
 in {
   options.vim.lsp = {
     enable = mkEnableOption "neovim lsp support";
@@ -30,7 +41,7 @@ in {
 
       formatter = mkOption {
         type = with types; enum ["nixpkgs-fmt" "alejandra"];
-        default = "alejandra";
+        default = "nixpkgs-fmt";
         description = "Which nix formatter to use";
       };
     };
@@ -48,7 +59,14 @@ in {
         description = "options to pass to rust analyzer";
       };
     };
-    python = mkEnableOption "Python LSP";
+    python = {
+      enable = mkEnableOption "Python LSP";
+      sortImports = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Sort imports on format";
+      };
+    };
     clang = {
       enable = mkEnableOption "C language LSP";
       c_header = mkEnableOption "C syntax header files";
@@ -153,10 +171,10 @@ in {
         local null_methods = require("null-ls.methods")
 
         local ls_sources = {
-          ${writeIf cfg.python
+          ${writeIf cfg.python.enable
           ''
             null_ls.builtins.formatting.black.with({
-              command = "${pkgs.black}/bin/black",
+              command = "${black}/bin/black",
             }),
           ''}
 
@@ -317,14 +335,15 @@ in {
           }
         ''}
 
-        ${writeIf cfg.python ''
+        ${writeIf cfg.python.enable ''
           -- Python config
           lspconfig.pyright.setup{
-            capabilities = capabilities;
-            on_attach=default_on_attach;
+            capabilities = capabilities,
+            on_attach=default_on_attach,
             cmd = {"${pkgs.nodePackages.pyright}/bin/pyright-langserver", "--stdio"}
-          }
+            }
         ''}
+
         ${
           writeIf cfg.scala.enable ''
             -- Scala config

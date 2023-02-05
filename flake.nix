@@ -284,8 +284,11 @@
             formatter = "alejandra";
           };
           rust.enable = isMaximal;
-          python = isMaximal;
           scala.enable = isMaximal;
+          python = {
+            enable = isMaximal;
+            sortImports = true;
+          };
           clang.enable = isMaximal;
           sql = isMaximal;
           ts = isMaximal;
