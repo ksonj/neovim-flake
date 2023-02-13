@@ -259,15 +259,15 @@
     "lspsaga": {
       "flake": false,
       "locked": {
-        "lastModified": 1647219889,
-        "narHash": "sha256-utb2Rp6RdYWZzVt4W7B7RHOk4Xq1Lli4RcHxZLa8dHc=",
-        "owner": "tami5",
+        "lastModified": 1675929504,
+        "narHash": "sha256-mkD5SUwBKId9dw6+MGtGG3/s47o1LiANjNMBB3KxVVg=",
+        "owner": "glepnir",
         "repo": "lspsaga.nvim",
-        "rev": "5309d75bd90ce5b1708331df3af1e971fa83a2b9",
+        "rev": "1d56a915d42a79242ef1237dba63836fcf3c7307",
         "type": "github"
       },
       "original": {
-        "owner": "tami5",
+        "owner": "glepnir",
         "repo": "lspsaga.nvim",
         "type": "github"
       }

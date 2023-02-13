@@ -17,7 +17,7 @@
       flake = false;
     };
     lspsaga = {
-      url = "github:tami5/lspsaga.nvim";
+      url = "github:glepnir/lspsaga.nvim";
       flake = false;
     };
     lspkind = {

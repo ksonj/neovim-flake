@@ -14,41 +14,39 @@ in {
     vim.startPlugins = ["lspsaga"];
 
     vim.vnoremap = {
-      "<silent><leader>ca" = ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>";
+      "<silent><leader>sa" = ":<C-U>Lspsaga range_code_action<CR>";
     };
 
     vim.nnoremap =
       {
-        "<silent><leader>lf" = "<cmd>lua require'lspsaga.provider'.lsp_finder()<CR>";
-        "<silent><leader>lh" = "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>";
-        "<silent><C-f>" = "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>";
-        "<silent><C-b>" = "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>";
-        "<silent><leader>lr" = "<cmd>lua require'lspsaga.rename'.rename()<CR>";
-        "<silent><leader>ld" = "<cmd>lua require'lspsaga.provider'.preview_definition()<CR>";
-        "<silent><leader>ll" = "<cmd>lua require'lspsaga.diagnostic'.show_line_diagnostics()<CR>";
-        "<silent><leader>lc" = "<cmd>lua require'lspsaga.diagnostic'.show_cursor_diagnostics()<CR>";
-        "<silent><leader>lp" = "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>";
-        "<silent><leader>ln" = "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>";
+        "<silent><leader>sf" = "<cmd>Lspsaga lsp_finder<CR>";
+        "<silent><leader>sh" = "<cmd>Lspsaga hover_doc<CR>";
+        "<silent><leader>sr" = "<cmd>Lspsaga rename<CR>";
+        "<silent><leader>sd" = "<cmd>Lspsaga peek_definition<CR>";
+        "<silent><leader>sl" = "<cmd>Lspsaga show_line_diagnostics<CR>";
+        "<silent><leader>sc" = "<cmd>Lspsaga show_cursor_diagnostics<CR>";
+        "<silent><leader>sp" = "<cmd>Lspsaga diagnostic_jump_prev<CR>";
+        "<silent><leader>sn" = "<cmd>Lspsaga diagnostic_jump_next<CR>";
       }
       // (
         if (!cfg.nvimCodeActionMenu.enable)
         then {
-          "<silent><leader>ca" = "<cmd>lua require('lspsaga.codeaction').code_action()<CR>";
+          "<silent><leader>sa" = "<cmd>Lspsaga code_action<CR>";
         }
         else {}
       )
       // (
         if (!cfg.lspSignature.enable)
         then {
-          "<silent><leader>ls" = "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>";
+          "<silent><leader>ss" = "<cmd>Lspsaga signature_help<CR>";
         }
         else {}
       );
 
-    vim.luaConfigRC.lspsage = nvim.dag.entryAnywhere ''
+    vim.luaConfigRC.lspsaga = nvim.dag.entryAfter ["lsp"] ''
       -- Enable lspsaga
       local saga = require 'lspsaga'
-      saga.init_lsp_saga()
+      saga.setup({})
     '';
   };
 }
