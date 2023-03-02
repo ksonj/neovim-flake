@@ -153,25 +153,28 @@ in {
         nvim.dag.entryAnywhere
         ''
           ${
-          if vcfg.keys.whichKey.enable
-          then ''
-            local _wk = require("which-key")
-            _wk.register({
-              ["<leader>l"] = {
-                name = "+lsp",
-                g = {
-                  name = "+goto",
-                },
-                w = {
-                  name = "+workspace",
+            if vcfg.keys.whichKey.enable
+            then ''
+              local _wk = require("which-key")
+              _wk.register({
+                ["<leader>l"] = {
+                  name = "+lsp",
+                  g = {
+                    name = "+goto",
+                  },
+                  w = {
+                    name = "+workspace",
+                  }
                 }
-              }
-            })
+              })
             ''
             else ""
           }
-          local attach_keymaps = function(client, bufnr)
+          local format_scala = function()
+            vim.lsp.buf.format()
+          end
 
+          local attach_keymaps = function(client, bufnr)
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lgD', '<cmd>lua vim.lsp.buf.declaration()<CR>', ${opts "Declaration"})
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lgd', '<cmd>lua vim.lsp.buf.definition()<CR>', ${opts "Definition"})
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lgt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', ${opts "Type definition"})
@@ -373,9 +376,13 @@ in {
             writeIf cfg.scala.enable ''
               -- Scala config
               -- Scala nvim-metals config
+              scala_attach = function(client, bufnr)
+                default_on_attach(client, bufnr)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lf', '<cmd>MetalsOrganizeImports<cr><cmd>lua vim.lsp.buf.format({ async=true })<CR>', ${opts "Format"})
+              end
               metals_config = require('metals').bare_config()
               metals_config.capabilities = capabilities
-              metals_config.on_attach = default_on_attach
+              metals_config.on_attach = scala_attach
               metals_config.settings = {
                  metalsBinaryPath = "${cfg.scala.metals}/bin/metals",
                  showImplicitArguments = true,

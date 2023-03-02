@@ -19,7 +19,9 @@ in {
 
     vim.luaConfigRC.lsp-signature = nvim.dag.entryAnywhere ''
       -- Enable lsp signature viewer
-      require("lsp_signature").setup()
+      require("lsp_signature").setup({
+      hint_prefix = "📎 "
+      })
     '';
   };
 }
