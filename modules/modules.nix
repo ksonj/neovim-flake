@@ -17,6 +17,7 @@
     ./tidal
     ./autopairs
     ./surround
+    ./copilot
     ./snippets
     ./keys
     ./markdown

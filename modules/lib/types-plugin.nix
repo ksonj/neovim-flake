@@ -43,6 +43,8 @@ with lib; let
     "nvim-metals"
     "vim-scala"
     "nvim-surround"
+    "copilot"
+    "copilot-cmp"
   ];
 
   pluginsType = with types; listOf (nullOr (either (enum availablePlugins) package));

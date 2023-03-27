@@ -52,6 +52,7 @@ in {
         },
         sources = {
           ${optionalString (config.vim.lsp.enable) "{ name = 'nvim_lsp' },"}
+          ${optionalString (config.vim.copilot.enable) "{ name = 'copilot' },"}
           ${optionalString (config.vim.lsp.rust.enable) "{ name = 'crates' },"}
           { name = 'vsnip' },
           { name = 'treesitter' },
@@ -68,7 +69,8 @@ in {
             c = cmp.mapping.close(),
           }),
           ['<CR>'] = cmp.mapping.confirm({
-            select = true,
+            select = false,
+            behavior = cmp.ConfirmBehavior.Replace,
           }),
           ['<Tab>'] = cmp.mapping(function (fallback)
             if cmp.visible() then
@@ -94,12 +96,18 @@ in {
         },
         formatting = {
           format = function(entry, vim_item)
-            -- type of kind
-            vim_item.kind = ${
-        optionalString (config.vim.visuals.lspkind.enable)
-        "require('lspkind').presets.default[vim_item.kind] .. ' ' .."
-      } vim_item.kind
-
+            print("Debug:", entry.source.name, vim_item.kind, require('lspkind').presets.default[vim_item.kind])
+            ${
+            if config.vim.visuals.lspkind.enable
+            then ''
+              local preset = require('lspkind').presets.default[vim_item.kind]
+              if preset then
+                -- type of kind, if lspkind preset exists
+                vim_item.kind = preset .. ' ' .. vim_item.kind 
+              end
+              ''
+            else ""
+            }
             -- name for each source
             vim_item.menu = ({
               buffer = "[Buffer]",
@@ -107,6 +115,7 @@ in {
               vsnip = "[VSnip]",
               crates = "[Crates]",
               path = "[Path]",
+              copilot = "[Copilot]",
             })[entry.source.name]
             return vim_item
           end,

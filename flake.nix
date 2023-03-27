@@ -234,6 +234,14 @@
       url = "github:kylechui/nvim-surround";
       flake = false;
     };
+    copilot = {
+      url = "github:zbirenbaum/copilot.lua";
+      flake = false;
+    };
+    copilot-cmp = {
+      url = "github:zbirenbaum/copilot-cmp";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -350,6 +358,7 @@
           enable = true;
           gitsigns.enable = true;
         };
+        vim.copilot.enable = isMaximal;
       };
     };
 
